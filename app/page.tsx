@@ -1,5 +1,6 @@
 import { races } from '@/lib/data/races';
 import Link from 'next/link';
+import Sparkline from '@/components/Sparkline';
 
 export default function Home() {
   const tossupCount = races.filter(r => r.status === 'Toss-up').length;
@@ -22,34 +23,43 @@ export default function Home() {
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Key Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div className="glass-card p-6 relative overflow-hidden">
+            <div className="glass-card p-6 relative overflow-hidden hover:bg-white/50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:scale-[1.005] transition-all">
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
-              <div className="text-xs font-bold text-secondary-gray uppercase tracking-wider mb-3 letter-spacing-wide">
-                Competitive Contests
+              <div className="flex items-start justify-between mb-3">
+                <div className="text-xs font-bold text-secondary-gray uppercase tracking-wider letter-spacing-wide">
+                  Competitive Contests
+                </div>
+                <Sparkline data={[12, 14, 13, 15, 14, 16, races.length]} color="#1E3A5F" className="w-16 h-8" />
               </div>
-              <div className="text-4xl font-bold text-navy mb-1" style={{ fontFamily: 'var(--font-fraunces)' }}>
+              <div className="text-4xl font-bold text-navy mb-1 tabular-nums" style={{ fontFamily: 'var(--font-fraunces)' }}>
                 {races.length}
               </div>
               <p className="text-sm text-secondary-gray">races under active surveillance</p>
             </div>
             
-            <div className="glass-card p-6 relative overflow-hidden">
+            <div className="glass-card p-6 relative overflow-hidden hover:bg-white/50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:scale-[1.005] transition-all">
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
-              <div className="text-xs font-bold text-secondary-gray uppercase tracking-wider mb-3">
-                Too Close to Call
+              <div className="flex items-start justify-between mb-3">
+                <div className="text-xs font-bold text-secondary-gray uppercase tracking-wider">
+                  Too Close to Call
+                </div>
+                <Sparkline data={[4, 5, 4, 6, 5, 6, tossupCount]} color="#DC2626" className="w-16 h-8" />
               </div>
-              <div className="text-4xl font-bold text-crimson mb-1" style={{ fontFamily: 'var(--font-fraunces)' }}>
+              <div className="text-4xl font-bold text-crimson mb-1 tabular-nums" style={{ fontFamily: 'var(--font-fraunces)' }}>
                 {tossupCount}
               </div>
               <p className="text-sm text-secondary-gray">within margin of error</p>
             </div>
             
-            <div className="glass-card p-6 relative overflow-hidden">
+            <div className="glass-card p-6 relative overflow-hidden hover:bg-white/50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:scale-[1.005] transition-all">
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
-              <div className="text-xs font-bold text-secondary-gray uppercase tracking-wider mb-3">
-                Voter Engagement
+              <div className="flex items-start justify-between mb-3">
+                <div className="text-xs font-bold text-secondary-gray uppercase tracking-wider">
+                  Voter Engagement
+                </div>
+                <Sparkline data={[62, 64, 63, 65, 64, 66, avgTurnout]} color="#0891b2" className="w-16 h-8" />
               </div>
-              <div className="text-4xl font-bold text-navy mb-1" style={{ fontFamily: 'var(--font-fraunces)' }}>
+              <div className="text-4xl font-bold text-navy mb-1 tabular-nums" style={{ fontFamily: 'var(--font-fraunces)' }}>
                 {avgTurnout}%
               </div>
               <p className="text-sm text-secondary-gray">average projected turnout</p>
@@ -91,7 +101,7 @@ export default function Home() {
                 );
                 
                 return (
-                  <div key={race.id} className="glass-card overflow-hidden transition-all duration-200 relative">
+                  <div key={race.id} className="glass-card overflow-hidden hover:bg-white/50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:scale-[1.005] transition-all duration-200 relative">
                     <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
                     <div className="p-8">
                       {/* Race Header */}
@@ -141,9 +151,9 @@ export default function Home() {
                           return (
                             <div 
                               key={candidate.id} 
-                              className="flex gap-4 p-5 rounded-xl bg-white/40 border border-gray-200/50 hover:bg-white/60 hover:shadow-lg transition-all duration-200 relative overflow-hidden group"
+                              className="flex gap-4 p-5 rounded-xl bg-white/40 backdrop-blur-2xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.06),0_2px_8px_rgba(0,0,0,0.04)] hover:bg-white/50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:scale-[1.005] transition-all duration-200 relative overflow-hidden group"
                             >
-                              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+                              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
                               <div 
                                 className="w-1.5 rounded-full flex-shrink-0 shadow-sm"
                                 style={{ 
