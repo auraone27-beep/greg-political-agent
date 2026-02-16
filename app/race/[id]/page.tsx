@@ -18,204 +18,269 @@ export default function RacePage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <Link href="/" className="text-sm text-blue-600 hover:text-blue-700 mb-2 inline-block">
-            ← Back to all races
-          </Link>
-          <h1 className="text-3xl font-bold text-gray-900">
-            {race.state} {race.district && `District ${race.district}`} - {race.type}
-          </h1>
-          <div className="flex items-center gap-3 mt-2">
-            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded ${
-              race.status === 'Toss-up' ? 'bg-amber-100 text-amber-800' :
-              race.status.includes('Lean') ? 'bg-blue-100 text-blue-800' :
-              'bg-gray-100 text-gray-800'
-            }`}>
-              {race.status}
-            </span>
-            <span className="text-sm text-gray-600">
-              Election: {new Date(race.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-            </span>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-6">
-            {/* Polling Trends */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Polling Trends</h2>
-              <PollChart race={race} />
+    <div className="min-h-screen relative">
+      <div className="relative z-10 fade-in">
+        {/* Header */}
+        <header className="border-b border-gray-200/50 backdrop-blur-sm bg-white/40 sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <Link 
+              href="/" 
+              className="inline-flex items-center text-sm font-medium text-navy hover:text-crimson transition-colors duration-200 mb-4"
+            >
+              ← Back to Race Intelligence Dashboard
+            </Link>
+            <h1 className="text-3xl sm:text-4xl font-bold text-navy mb-2" style={{ fontFamily: 'var(--font-fraunces)' }}>
+              {race.state} {race.district && `District ${race.district}`}
+            </h1>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="text-base text-secondary-gray font-medium">{race.type}</span>
+              <span className="text-secondary-gray">•</span>
+              <span className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${
+                race.status === 'Toss-up' 
+                  ? 'bg-crimson/10 text-crimson' 
+                  : race.status.includes('Lean') 
+                  ? 'bg-navy/10 text-navy' 
+                  : 'bg-gray-100 text-secondary-gray'
+              }`}>
+                {race.status}
+              </span>
+              <span className="text-secondary-gray">•</span>
+              <span className="text-sm text-secondary-gray">
+                Election: {new Date(race.date).toLocaleDateString('en-US', { 
+                  month: 'long', 
+                  day: 'numeric', 
+                  year: 'numeric' 
+                })}
+              </span>
             </div>
+          </div>
+        </header>
 
-            {/* Candidates */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Candidates</h2>
-              <div className="space-y-6">
-                {race.candidates.map((candidate) => (
-                  <div key={candidate.id} className="border-l-4 pl-4" style={{
-                    borderColor: candidate.party === 'Democrat' ? '#3b82f6' : 
-                                candidate.party === 'Republican' ? '#ef4444' : '#6b7280'
-                  }}>
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h3 className="text-lg font-bold text-gray-900">{candidate.name}</h3>
-                        <p className="text-sm text-gray-600">{candidate.party} • {candidate.currentPosition}</p>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-2xl font-bold text-gray-900">
-                          {race.polls[0].results[candidate.id]}%
-                        </div>
-                        <div className="text-xs text-gray-500">Latest poll</div>
-                      </div>
-                    </div>
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Polling Trajectory */}
+              <div className="glass-card p-8">
+                <h2 className="text-2xl font-bold text-navy mb-6" style={{ fontFamily: 'var(--font-fraunces)' }}>
+                  Polling Trajectory
+                </h2>
+                <PollChart race={race} />
+              </div>
 
-                    <div className="grid grid-cols-2 gap-4 mt-4">
-                      <div>
-                        <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">Fundraising</div>
-                        <div className="mt-1 text-sm font-semibold text-gray-900">
-                          ${(candidate.fundraising.total / 1000000).toFixed(1)}M total
+              {/* Candidate Profiles */}
+              <div className="glass-card p-8">
+                <h2 className="text-2xl font-bold text-navy mb-6" style={{ fontFamily: 'var(--font-fraunces)' }}>
+                  Candidate Profiles
+                </h2>
+                <div className="space-y-8">
+                  {race.candidates.map((candidate) => {
+                    const sentiment = race.sentiment.find(s => s.candidate === candidate.id);
+                    const latestPoll = race.polls[0].results[candidate.id];
+                    
+                    return (
+                      <div 
+                        key={candidate.id} 
+                        className="border-l-4 pl-6 py-2 rounded-r-xl bg-white/40 hover:bg-white/60 transition-all duration-200"
+                        style={{
+                          borderColor: candidate.party === 'Democrat' ? '#1E3A5F' : 
+                                      candidate.party === 'Republican' ? '#DC2626' : '#6B7280'
+                        }}
+                      >
+                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                          <div className="flex-1">
+                            <h3 className="text-xl font-bold text-navy mb-1" style={{ fontFamily: 'var(--font-fraunces)' }}>
+                              {candidate.name}
+                            </h3>
+                            <p className="text-sm font-medium text-secondary-gray">
+                              {candidate.party} • {candidate.currentPosition}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-3xl font-bold text-navy" style={{ fontFamily: 'var(--font-fraunces)' }}>
+                              {latestPoll}%
+                            </div>
+                            <div className="text-xs text-secondary-gray">Latest poll</div>
+                          </div>
                         </div>
-                        <div className="text-xs text-gray-600">
-                          ${(candidate.fundraising.lastQuarter / 1000000).toFixed(1)}M last quarter
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">Donors</div>
-                        <div className="mt-1 text-sm font-semibold text-gray-900">
-                          {candidate.fundraising.donorCount.toLocaleString()}
-                        </div>
-                        <div className="text-xs text-gray-600">
-                          ${candidate.fundraising.averageDonation} avg
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="mt-4">
-                      <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Key Issues</div>
-                      <div className="flex flex-wrap gap-2">
-                        {candidate.keyIssues.map((issue, idx) => (
-                          <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                            {issue}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-4">
+                          <div>
+                            <div className="text-xs font-semibold text-secondary-gray uppercase tracking-wider mb-2">
+                              Fundraising
+                            </div>
+                            <div className="text-lg font-bold text-navy">
+                              ${(candidate.fundraising.total / 1000000).toFixed(1)}M total
+                            </div>
+                            <div className="text-sm text-secondary-gray">
+                              ${(candidate.fundraising.lastQuarter / 1000000).toFixed(1)}M last quarter
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-xs font-semibold text-secondary-gray uppercase tracking-wider mb-2">
+                              Donors
+                            </div>
+                            <div className="text-lg font-bold text-navy">
+                              {candidate.fundraising.donorCount.toLocaleString()}
+                            </div>
+                            <div className="text-sm text-secondary-gray">
+                              ${candidate.fundraising.averageDonation} average
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="mb-4">
+                          <div className="text-xs font-semibold text-secondary-gray uppercase tracking-wider mb-2">
+                            Key Issues
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {candidate.keyIssues.map((issue, idx) => (
+                              <span 
+                                key={idx} 
+                                className="px-3 py-1 bg-navy/5 text-navy text-sm rounded-full font-medium hover:bg-navy/10 transition-colors duration-200"
+                              >
+                                {issue}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="mb-4">
+                          <div className="text-xs font-semibold text-secondary-gray uppercase tracking-wider mb-2">
+                            Endorsements ({candidate.endorsements.length})
+                          </div>
+                          <div className="text-sm text-secondary-gray">
+                            {candidate.endorsements.slice(0, 3).join(', ')}
+                            {candidate.endorsements.length > 3 && ` +${candidate.endorsements.length - 3} more`}
+                          </div>
+                        </div>
+
+                        {sentiment && (
+                          <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-200/50">
+                            <div className="text-xs font-semibold text-secondary-gray uppercase tracking-wider">
+                              Social Sentiment
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-base font-bold text-navy">
+                                {sentiment.score}/100
+                              </span>
+                              <span className={`text-sm font-semibold ${
+                                sentiment.trend === 'up' ? 'text-green-600' :
+                                sentiment.trend === 'down' ? 'text-red-600' :
+                                'text-secondary-gray'
+                              }`}>
+                                {sentiment.trend === 'up' ? '↑ Trending up' :
+                                 sentiment.trend === 'down' ? '↓ Trending down' : 
+                                 '→ Stable'}
+                              </span>
+                              <span className="text-xs text-secondary-gray">
+                                ({sentiment.sources.toLocaleString()} sources)
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Recent Polls */}
+              <div className="glass-card p-8">
+                <h2 className="text-2xl font-bold text-navy mb-6" style={{ fontFamily: 'var(--font-fraunces)' }}>
+                  Recent Polls
+                </h2>
+                <div className="space-y-4">
+                  {race.polls.map((poll, idx) => (
+                    <div 
+                      key={idx} 
+                      className="border-b border-gray-200/50 pb-4 last:border-0 hover:bg-white/40 rounded-lg p-4 -m-4 transition-all duration-200"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                        <div>
+                          <span className="font-semibold text-navy">{poll.pollster}</span>
+                          <span className="mx-2 text-secondary-gray">•</span>
+                          <span className="text-sm text-secondary-gray">
+                            {new Date(poll.date).toLocaleDateString('en-US', { 
+                              month: 'short', 
+                              day: 'numeric', 
+                              year: 'numeric' 
+                            })}
                           </span>
+                        </div>
+                        <div className="text-xs text-secondary-gray">
+                          n={poll.sampleSize.toLocaleString()} • MoE ±{poll.marginOfError}%
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {race.candidates.map((candidate) => (
+                          <div key={candidate.id} className="flex items-center justify-between">
+                            <span className="text-sm text-secondary-gray">{candidate.name}</span>
+                            <span className="text-base font-bold text-navy">
+                              {poll.results[candidate.id]}%
+                            </span>
+                          </div>
                         ))}
                       </div>
                     </div>
-
-                    <div className="mt-4">
-                      <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
-                        Endorsements ({candidate.endorsements.length})
-                      </div>
-                      <div className="text-sm text-gray-700">
-                        {candidate.endorsements.slice(0, 3).join(', ')}
-                        {candidate.endorsements.length > 3 && ` +${candidate.endorsements.length - 3} more`}
-                      </div>
-                    </div>
-
-                    <div className="mt-4">
-                      {race.sentiment.find(s => s.candidate === candidate.id) && (
-                        <div className="flex items-center gap-3">
-                          <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                            Social Sentiment
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-bold text-gray-900">
-                              {race.sentiment.find(s => s.candidate === candidate.id)?.score}/100
-                            </span>
-                            <span className={`text-sm font-medium ${
-                              race.sentiment.find(s => s.candidate === candidate.id)?.trend === 'up' ? 'text-green-600' :
-                              race.sentiment.find(s => s.candidate === candidate.id)?.trend === 'down' ? 'text-red-600' :
-                              'text-gray-600'
-                            }`}>
-                              {race.sentiment.find(s => s.candidate === candidate.id)?.trend === 'up' ? '↑ Trending up' :
-                               race.sentiment.find(s => s.candidate === candidate.id)?.trend === 'down' ? '↓ Trending down' : 
-                               '→ Stable'}
-                            </span>
-                            <span className="text-xs text-gray-500">
-                              ({race.sentiment.find(s => s.candidate === candidate.id)?.sources.toLocaleString()} sources)
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Polling Data */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Recent Polls</h2>
-              <div className="space-y-3">
-                {race.polls.map((poll, idx) => (
-                  <div key={idx} className="border-b border-gray-100 pb-3 last:border-0">
-                    <div className="flex items-center justify-between mb-2">
-                      <div>
-                        <span className="font-medium text-gray-900">{poll.pollster}</span>
-                        <span className="mx-2 text-gray-400">•</span>
-                        <span className="text-sm text-gray-600">
-                          {new Date(poll.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                        </span>
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        n={poll.sampleSize} • MoE ±{poll.marginOfError}%
-                      </div>
+            {/* Sidebar */}
+            <div className="lg:col-span-1 space-y-8">
+              {/* Key Metrics */}
+              <div className="glass-card p-6">
+                <h2 className="text-xl font-bold text-navy mb-6" style={{ fontFamily: 'var(--font-fraunces)' }}>
+                  Key Metrics
+                </h2>
+                <div className="space-y-6">
+                  <div>
+                    <div className="text-xs font-semibold text-secondary-gray uppercase tracking-wider mb-2">
+                      Turnout Projection
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      {race.candidates.map((candidate) => (
-                        <div key={candidate.id} className="flex items-center justify-between">
-                          <span className="text-sm text-gray-700">{candidate.name}</span>
-                          <span className="text-sm font-semibold text-gray-900">
-                            {poll.results[candidate.id]}%
-                          </span>
-                        </div>
+                    <div className="text-3xl font-bold text-navy" style={{ fontFamily: 'var(--font-fraunces)' }}>
+                      {race.turnoutProjection}%
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold text-secondary-gray uppercase tracking-wider mb-2">
+                      Total Fundraising
+                    </div>
+                    <div className="text-3xl font-bold text-navy" style={{ fontFamily: 'var(--font-fraunces)' }}>
+                      ${(race.candidates.reduce((acc, c) => acc + c.fundraising.total, 0) / 1000000).toFixed(1)}M
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold text-secondary-gray uppercase tracking-wider mb-2">
+                      Key Issues
+                    </div>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {race.keyIssues.map((issue, idx) => (
+                        <span 
+                          key={idx} 
+                          className="px-2 py-1 bg-crimson/10 text-crimson text-xs rounded-full font-semibold"
+                        >
+                          {issue}
+                        </span>
                       ))}
                     </div>
                   </div>
-                ))}
+                </div>
+              </div>
+
+              {/* AI Strategy Assistant */}
+              <div className="glass-card p-6">
+                <h2 className="text-xl font-bold text-navy mb-4" style={{ fontFamily: 'var(--font-fraunces)' }}>
+                  AI Strategy Assistant
+                </h2>
+                <AIChat race={race} />
               </div>
             </div>
           </div>
-
-          <div className="lg:col-span-1 space-y-6">
-            {/* Key Metrics */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Key Metrics</h2>
-              <div className="space-y-4">
-                <div>
-                  <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">Turnout Projection</div>
-                  <div className="mt-1 text-2xl font-bold text-gray-900">{race.turnoutProjection}%</div>
-                </div>
-                <div>
-                  <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Fundraising</div>
-                  <div className="mt-1 text-2xl font-bold text-gray-900">
-                    ${(race.candidates.reduce((acc, c) => acc + c.fundraising.total, 0) / 1000000).toFixed(1)}M
-                  </div>
-                </div>
-                <div>
-                  <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">Key Issues</div>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {race.keyIssues.map((issue, idx) => (
-                      <span key={idx} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded font-medium">
-                        {issue}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* AI Strategy Chat */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">AI Strategy Assistant</h2>
-              <AIChat race={race} />
-            </div>
-          </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

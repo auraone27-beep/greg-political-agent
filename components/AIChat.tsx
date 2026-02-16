@@ -37,27 +37,34 @@ export default function AIChat({ race }: { race: Race }) {
 
   return (
     <div className="flex flex-col h-96">
-      <div className="flex-1 overflow-y-auto space-y-4 mb-4">
+      <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-2">
         {messages.map((message, idx) => (
           <div
             key={idx}
             className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-[85%] rounded-lg px-4 py-2 ${
+              className={`max-w-[85%] rounded-xl px-4 py-3 transition-all duration-200 ${
                 message.role === 'user'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-900'
+                  ? 'bg-navy text-white'
+                  : 'bg-white/60 border border-gray-200/50 text-navy'
               }`}
             >
-              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+              <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
             </div>
           </div>
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-gray-100 rounded-lg px-4 py-2">
-              <p className="text-sm text-gray-600">Analyzing...</p>
+            <div className="bg-white/60 border border-gray-200/50 rounded-xl px-4 py-3">
+              <div className="flex items-center gap-2">
+                <div className="flex gap-1">
+                  <div className="w-2 h-2 bg-navy rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="w-2 h-2 bg-navy rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="w-2 h-2 bg-navy rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                </div>
+                <p className="text-sm text-secondary-gray">Analyzing...</p>
+              </div>
             </div>
           </div>
         )}
@@ -69,12 +76,12 @@ export default function AIChat({ race }: { race: Race }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask about strategy, polling, fundraising..."
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 px-4 py-3 bg-white/60 border border-gray-200/50 rounded-xl text-sm text-navy placeholder-secondary-gray focus:outline-none focus:ring-2 focus:ring-navy focus:border-transparent transition-all duration-200"
         />
         <button
           type="submit"
           disabled={isLoading || !input.trim()}
-          className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-5 py-3 bg-navy text-white text-sm font-semibold rounded-xl hover:bg-navy/90 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 disabled:hover:scale-100"
         >
           Send
         </button>
