@@ -21,13 +21,15 @@ export default function RacePage({ params }: { params: { id: string } }) {
     <div className="min-h-screen relative">
       <div className="relative z-10 fade-in">
         {/* Header */}
-        <header className="border-b border-gray-200/50 backdrop-blur-sm bg-white/40 sticky top-0 z-50">
+        <header className="border-b border-gray-200/50 backdrop-blur-sm bg-white/40 sticky top-0 z-50 relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <Link 
               href="/" 
-              className="inline-flex items-center text-sm font-medium text-navy hover:text-crimson transition-colors duration-200 mb-4"
+              className="inline-flex items-center text-sm font-semibold text-navy hover:text-crimson transition-colors duration-200 mb-4 group"
             >
-              ← Back to Race Intelligence Dashboard
+              <span className="group-hover:-translate-x-1 transition-transform duration-200">←</span>
+              <span className="ml-2">Race Intelligence Dashboard</span>
             </Link>
             <h1 className="text-3xl sm:text-4xl font-bold text-navy mb-2" style={{ fontFamily: 'var(--font-fraunces)' }}>
               {race.state} {race.district && `District ${race.district}`}
@@ -61,18 +63,22 @@ export default function RacePage({ params }: { params: { id: string } }) {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
               {/* Polling Trajectory */}
-              <div className="glass-card p-8">
-                <h2 className="text-2xl font-bold text-navy mb-6" style={{ fontFamily: 'var(--font-fraunces)' }}>
+              <div className="glass-card p-8 relative overflow-hidden">
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                <h2 className="text-2xl font-bold text-navy mb-2" style={{ fontFamily: 'var(--font-fraunces)' }}>
                   Polling Trajectory
                 </h2>
+                <p className="text-sm text-secondary-gray mb-6">Historical trend analysis across all major pollsters</p>
                 <PollChart race={race} />
               </div>
 
               {/* Candidate Profiles */}
-              <div className="glass-card p-8">
-                <h2 className="text-2xl font-bold text-navy mb-6" style={{ fontFamily: 'var(--font-fraunces)' }}>
+              <div className="glass-card p-8 relative overflow-hidden">
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                <h2 className="text-2xl font-bold text-navy mb-2" style={{ fontFamily: 'var(--font-fraunces)' }}>
                   Candidate Profiles
                 </h2>
+                <p className="text-sm text-secondary-gray mb-6">Comprehensive intelligence on key contenders</p>
                 <div className="space-y-8">
                   {race.candidates.map((candidate) => {
                     const sentiment = race.sentiment.find(s => s.candidate === candidate.id);
@@ -81,12 +87,13 @@ export default function RacePage({ params }: { params: { id: string } }) {
                     return (
                       <div 
                         key={candidate.id} 
-                        className="border-l-4 pl-6 py-2 rounded-r-xl bg-white/40 hover:bg-white/60 transition-all duration-200"
+                        className="border-l-4 pl-6 py-4 pr-6 rounded-r-xl bg-white/40 hover:bg-white/60 transition-all duration-200 relative overflow-hidden hover:shadow-md group"
                         style={{
                           borderColor: candidate.party === 'Democrat' ? '#1E3A5F' : 
                                       candidate.party === 'Republican' ? '#DC2626' : '#6B7280'
                         }}
                       >
+                        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
                         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
                           <div className="flex-1">
                             <h3 className="text-xl font-bold text-navy mb-1" style={{ fontFamily: 'var(--font-fraunces)' }}>
@@ -186,10 +193,12 @@ export default function RacePage({ params }: { params: { id: string } }) {
               </div>
 
               {/* Recent Polls */}
-              <div className="glass-card p-8">
-                <h2 className="text-2xl font-bold text-navy mb-6" style={{ fontFamily: 'var(--font-fraunces)' }}>
+              <div className="glass-card p-8 relative overflow-hidden">
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                <h2 className="text-2xl font-bold text-navy mb-2" style={{ fontFamily: 'var(--font-fraunces)' }}>
                   Recent Polls
                 </h2>
+                <p className="text-sm text-secondary-gray mb-6">Latest survey data from credible pollsters</p>
                 <div className="space-y-4">
                   {race.polls.map((poll, idx) => (
                     <div 
@@ -231,10 +240,12 @@ export default function RacePage({ params }: { params: { id: string } }) {
             {/* Sidebar */}
             <div className="lg:col-span-1 space-y-8">
               {/* Key Metrics */}
-              <div className="glass-card p-6">
-                <h2 className="text-xl font-bold text-navy mb-6" style={{ fontFamily: 'var(--font-fraunces)' }}>
+              <div className="glass-card p-6 relative overflow-hidden">
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                <h2 className="text-xl font-bold text-navy mb-2" style={{ fontFamily: 'var(--font-fraunces)' }}>
                   Key Metrics
                 </h2>
+                <p className="text-xs text-secondary-gray mb-6 uppercase tracking-wider">Race fundamentals at a glance</p>
                 <div className="space-y-6">
                   <div>
                     <div className="text-xs font-semibold text-secondary-gray uppercase tracking-wider mb-2">
@@ -271,10 +282,12 @@ export default function RacePage({ params }: { params: { id: string } }) {
               </div>
 
               {/* AI Strategy Assistant */}
-              <div className="glass-card p-6">
-                <h2 className="text-xl font-bold text-navy mb-4" style={{ fontFamily: 'var(--font-fraunces)' }}>
+              <div className="glass-card p-6 relative overflow-hidden">
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                <h2 className="text-xl font-bold text-navy mb-2" style={{ fontFamily: 'var(--font-fraunces)' }}>
                   AI Strategy Assistant
                 </h2>
+                <p className="text-xs text-secondary-gray mb-4 uppercase tracking-wider">Instant intelligence briefings</p>
                 <AIChat race={race} />
               </div>
             </div>

@@ -10,7 +10,7 @@ export default function PollChart({ race }: { race: Race }) {
     <div className="space-y-6">
       <div className="h-80 relative">
         {/* Y-axis labels */}
-        <div className="absolute left-0 top-0 bottom-0 w-12 flex flex-col justify-between text-sm font-medium text-secondary-gray">
+        <div className="absolute left-0 top-0 bottom-0 w-12 flex flex-col justify-between text-xs font-bold text-secondary-gray tabular-nums">
           <span>60%</span>
           <span>50%</span>
           <span>40%</span>
@@ -18,11 +18,11 @@ export default function PollChart({ race }: { race: Race }) {
         </div>
 
         {/* Chart area */}
-        <div className="ml-14 h-full border-l-2 border-b-2 border-gray-300 relative rounded-bl-lg">
+        <div className="ml-14 h-full border-l-2 border-b-2 border-navy/20 relative rounded-bl-lg">
           {/* Grid lines */}
           <div className="absolute inset-0 flex flex-col justify-between">
             {[60, 50, 40, 30].map((val) => (
-              <div key={val} className="border-t border-gray-200/50" />
+              <div key={val} className="border-t border-navy/10" />
             ))}
           </div>
 
@@ -79,7 +79,7 @@ export default function PollChart({ race }: { race: Race }) {
         </div>
 
         {/* X-axis labels */}
-        <div className="ml-14 mt-4 flex justify-between text-sm font-medium text-secondary-gray">
+        <div className="ml-14 mt-4 flex justify-between text-xs font-bold text-secondary-gray uppercase tracking-wide">
           {reversedPolls.map((poll, idx) => (
             <span key={idx} className="text-center">
               {new Date(poll.date).toLocaleDateString('en-US', { 
@@ -92,22 +92,22 @@ export default function PollChart({ race }: { race: Race }) {
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-gray-200/50">
+      <div className="flex flex-wrap items-center gap-6 pt-6 border-t border-gray-200/50">
         {race.candidates.map((candidate) => {
           const color = candidate.party === 'Democrat' ? '#1E3A5F' : 
                        candidate.party === 'Republican' ? '#DC2626' : '#6B7280';
           
           return (
-            <div key={candidate.id} className="flex items-center gap-3">
+            <div key={candidate.id} className="flex items-center gap-3 px-4 py-2 rounded-lg bg-white/40 border border-gray-200/50">
               <div 
-                className="w-4 h-4 rounded-full border-2" 
+                className="w-3 h-3 rounded-full border-2 shadow-sm" 
                 style={{ 
                   backgroundColor: color,
                   borderColor: color
                 }}
               />
-              <span className="text-sm font-semibold text-navy">{candidate.name}</span>
-              <span className="text-sm text-secondary-gray">({candidate.party.substring(0, 1)})</span>
+              <span className="text-sm font-bold text-navy">{candidate.name}</span>
+              <span className="text-xs text-secondary-gray font-medium">({candidate.party.substring(0, 1)})</span>
             </div>
           );
         })}

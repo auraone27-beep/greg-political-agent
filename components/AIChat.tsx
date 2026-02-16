@@ -12,7 +12,7 @@ export default function AIChat({ race }: { race: Race }) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: `I'm your AI strategy assistant for the ${race.state} ${race.type === 'Senate' ? 'Senate' : `District ${race.district}`} race. I can help analyze polling trends, fundraising data, and campaign strategy. What would you like to know?`
+      content: `Intelligence briefing ready for ${race.state} ${race.type === 'Senate' ? 'Senate' : `District ${race.district}`}.\n\nI can analyze polling trends, fundraising dynamics, sentiment shifts, and strategic implications. Ask me anything about this race.`
     }
   ]);
   const [input, setInput] = useState('');
@@ -56,14 +56,15 @@ export default function AIChat({ race }: { race: Race }) {
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-white/60 border border-gray-200/50 rounded-xl px-4 py-3">
-              <div className="flex items-center gap-2">
+            <div className="bg-white/60 border border-gray-200/50 rounded-xl px-4 py-3 relative overflow-hidden">
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+              <div className="flex items-center gap-3">
                 <div className="flex gap-1">
                   <div className="w-2 h-2 bg-navy rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                  <div className="w-2 h-2 bg-navy rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="w-2 h-2 bg-crimson rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
                   <div className="w-2 h-2 bg-navy rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                 </div>
-                <p className="text-sm text-secondary-gray">Analyzing...</p>
+                <p className="text-sm font-medium text-secondary-gray">Analyzing intelligence data...</p>
               </div>
             </div>
           </div>

@@ -9,43 +9,50 @@ export default function Home() {
     <div className="min-h-screen relative">
       <div className="relative z-10 fade-in">
         {/* Header */}
-        <header className="border-b border-gray-200/50 backdrop-blur-sm bg-white/40 sticky top-0 z-50">
+        <header className="border-b border-gray-200/50 backdrop-blur-sm bg-white/40 sticky top-0 z-50 relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <h1 className="text-4xl sm:text-5xl font-bold text-navy mb-2" style={{ fontFamily: 'var(--font-fraunces)' }}>
-              Political Race Agent
+            <h1 className="text-4xl sm:text-5xl font-bold text-navy mb-2 leading-tight" style={{ fontFamily: 'var(--font-fraunces)' }}>
+              2026 Political Race Intelligence
             </h1>
-            <p className="text-lg text-secondary-gray">Race Intelligence Dashboard</p>
+            <p className="text-lg text-secondary-gray font-medium">Real-time analysis • Polling trajectories • Strategic insights for Gregory Curtis</p>
           </div>
         </header>
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Key Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div className="glass-card p-6">
-              <div className="text-sm font-semibold text-secondary-gray uppercase tracking-wider mb-2">
-                Total Races Tracked
+            <div className="glass-card p-6 relative overflow-hidden">
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+              <div className="text-xs font-bold text-secondary-gray uppercase tracking-wider mb-3 letter-spacing-wide">
+                Competitive Contests
               </div>
-              <div className="text-4xl font-bold text-navy" style={{ fontFamily: 'var(--font-fraunces)' }}>
+              <div className="text-4xl font-bold text-navy mb-1" style={{ fontFamily: 'var(--font-fraunces)' }}>
                 {races.length}
               </div>
+              <p className="text-sm text-secondary-gray">races under active surveillance</p>
             </div>
             
-            <div className="glass-card p-6">
-              <div className="text-sm font-semibold text-secondary-gray uppercase tracking-wider mb-2">
-                Toss-Up Races
+            <div className="glass-card p-6 relative overflow-hidden">
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+              <div className="text-xs font-bold text-secondary-gray uppercase tracking-wider mb-3">
+                Too Close to Call
               </div>
-              <div className="text-4xl font-bold text-crimson" style={{ fontFamily: 'var(--font-fraunces)' }}>
+              <div className="text-4xl font-bold text-crimson mb-1" style={{ fontFamily: 'var(--font-fraunces)' }}>
                 {tossupCount}
               </div>
+              <p className="text-sm text-secondary-gray">within margin of error</p>
             </div>
             
-            <div className="glass-card p-6">
-              <div className="text-sm font-semibold text-secondary-gray uppercase tracking-wider mb-2">
-                Avg. Projected Turnout
+            <div className="glass-card p-6 relative overflow-hidden">
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+              <div className="text-xs font-bold text-secondary-gray uppercase tracking-wider mb-3">
+                Voter Engagement
               </div>
-              <div className="text-4xl font-bold text-navy" style={{ fontFamily: 'var(--font-fraunces)' }}>
+              <div className="text-4xl font-bold text-navy mb-1" style={{ fontFamily: 'var(--font-fraunces)' }}>
                 {avgTurnout}%
               </div>
+              <p className="text-sm text-secondary-gray">average projected turnout</p>
             </div>
           </div>
 
@@ -56,9 +63,24 @@ export default function Home() {
             </h2>
             
             {races.length === 0 ? (
-              <div className="glass-card p-12 text-center">
-                <p className="text-lg text-secondary-gray mb-2">No races currently tracked</p>
-                <p className="text-sm text-secondary-gray">New races will appear here as they become competitive</p>
+              <div className="glass-card p-16 text-center relative overflow-hidden">
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+                <div className="max-w-md mx-auto">
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-navy/10 to-crimson/10 flex items-center justify-center">
+                    <svg className="w-10 h-10 text-navy/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-bold text-navy mb-3" style={{ fontFamily: 'var(--font-fraunces)' }}>
+                    No Active Contests
+                  </h3>
+                  <p className="text-base text-secondary-gray mb-2 leading-relaxed">
+                    Intelligence gathering in progress. Competitive races will surface here as polling data confirms tight margins.
+                  </p>
+                  <p className="text-sm text-secondary-gray/70">
+                    Monitoring 435 House seats • 34 Senate races • 36 gubernatorial contests
+                  </p>
+                </div>
               </div>
             ) : (
               races.map((race) => {
@@ -69,7 +91,8 @@ export default function Home() {
                 );
                 
                 return (
-                  <div key={race.id} className="glass-card overflow-hidden transition-all duration-200">
+                  <div key={race.id} className="glass-card overflow-hidden transition-all duration-200 relative">
+                    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
                     <div className="p-8">
                       {/* Race Header */}
                       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
@@ -118,10 +141,11 @@ export default function Home() {
                           return (
                             <div 
                               key={candidate.id} 
-                              className="flex gap-4 p-4 rounded-xl bg-white/40 border border-gray-200/50 hover:bg-white/60 transition-all duration-200"
+                              className="flex gap-4 p-5 rounded-xl bg-white/40 border border-gray-200/50 hover:bg-white/60 hover:shadow-lg transition-all duration-200 relative overflow-hidden group"
                             >
+                              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
                               <div 
-                                className="w-1.5 rounded-full flex-shrink-0"
+                                className="w-1.5 rounded-full flex-shrink-0 shadow-sm"
                                 style={{ 
                                   backgroundColor: candidate.party === 'Democrat' ? '#1E3A5F' : 
                                                   candidate.party === 'Republican' ? '#DC2626' : '#6B7280' 
