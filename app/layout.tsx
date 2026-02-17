@@ -25,11 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${fraunces.variable} font-sans antialiased`}>
-        {/* Ambient Background Blobs - EXACT from GLASS_REFERENCE.md */}
-        <div className="fixed inset-0 -z-10 bg-[#f0f2f5]">
-          <div className="absolute -top-[20%] -left-[10%] w-[600px] h-[600px] rounded-full bg-cyan-300/30 blur-[150px]" />
-          <div className="absolute -bottom-[20%] -right-[10%] w-[500px] h-[500px] rounded-full bg-blue-300/25 blur-[120px]" />
-          <div className="absolute top-[40%] right-[20%] w-[400px] h-[400px] rounded-full bg-indigo-300/20 blur-[130px]" />
+        {/* Ambient Background — High saturation navy/crimson editorial */}
+        <div className="fixed inset-0 -z-10" style={{ background: 'linear-gradient(135deg, #edf2f7 0%, #f0f2f5 40%, #f5f0f0 100%)' }}>
+          <div className="absolute -top-[10%] -left-[5%] w-[800px] h-[800px] rounded-full blur-[180px]" style={{ background: 'rgba(30, 58, 95, 0.20)' }} />
+          <div className="absolute bottom-[-10%] right-[-5%] w-[700px] h-[700px] rounded-full blur-[160px]" style={{ background: 'rgba(220, 38, 38, 0.10)' }} />
+          <div className="absolute top-[40%] right-[15%] w-[500px] h-[500px] rounded-full blur-[140px]" style={{ background: 'rgba(99, 102, 241, 0.12)' }} />
         </div>
         {children}
       </body>
